@@ -21,6 +21,7 @@ import { useHomeFetch } from './hooks/useHomeFetch';
 import NoImage from './images/no_image.jpg';
 
 const Home = () => {
+  const [searchTerm, setSearchTerm] = useState('');
   const [
     {
       state: { movies, currentPage, totalPages, heroImage },
@@ -28,8 +29,8 @@ const Home = () => {
       error,
     },
     fetchMovies,
-  ] = useHomeFetch();
-  const [searchTerm, setSearchTerm] = useState('');
+  ] = useHomeFetch(searchTerm);
+ 
   //this function used for search bar
   const searchMovies = search => {
     //check if we have search word or not, if not we will display popular movies

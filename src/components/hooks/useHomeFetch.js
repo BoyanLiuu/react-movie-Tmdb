@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { POPULAR_BASE_URL } from '../../config';
 // create a customer hook
-export const useHomeFetch = () =>{
+export const useHomeFetch = (searchTerm) =>{
         //create hook state
         const [state,setState] = useState({movies:[]});
         const [loading,setLoading] = useState(false);
@@ -34,8 +34,24 @@ export const useHomeFetch = () =>{
         }
     
         useEffect(()=>{
-            fetchMovies(POPULAR_BASE_URL);
+            //get data from sessionStorage
+            if(sessionStorage.homeState){
+                setState(JSON.parse(sessionStorage.homeState));
+                setLoading(false);
+
+            }else{
+                fetchMovies(POPULAR_BASE_URL);
+            }
+
         },[])
+
+        useEffect(()=>{
+            //save into session storage when we have no searchTerm
+            if(!searchTerm){
+                sessionStorage.setItem('homeState',JSON.stringify(state));
+            }
+
+        },[searchTerm,state])
 
         return [{state,loading,error},fetchMovies];
 }
